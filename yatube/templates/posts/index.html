@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+  <head>    
+    {% block title %}
+    {{ text }}
+    {% endblock %}
+  </head>
+  <body>
+    <main> 
+      {% block content %}
+      {% include 'posts/includes/switcher.html' %}
+      {% for post in page_obj %}
+        {% include 'posts/includes/post.html' %}
+      {% endfor %}
+      {% include 'posts/includes/paginator.html' %}
+    </main>
+      {% endblock %}
+  </body>

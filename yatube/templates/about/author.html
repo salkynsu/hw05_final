@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+<div class="container px-3 py-3">
+<div class="row">
+    <h1 class="container py-5" style="color: darkviolet" align="center">Алиса Ликарпенкова</h1>
+    <aside class="col-12 col-md-3">
+        {% load static %}
+        <img class="card-img-top" src="{% static 'img/Alice.jpg' %}" alt="Card image cap">  
+    </aside>
+    <article class="col-12 col-md-9">
+      <p>
+        К 31 году я так и не поняла, кем хочу быть, когда вырасту. 
+        А быть непонятно кем мне надоело. Почему бы не стать разработчицей?
+        Возьму и стану!
+      </p>
+      <p>
+          Мне очень страшно, и примерно каждый день я хочу сдаться и бросить
+          это всё. Но пока не сдаюсь.
+      </p>
+      <p>
+        В учёбе меня очень поддерживает моя собака Марта. Вот она:
+      </p>
+        <img class="card-img-top" src="{% static 'img/doge.jpg' %}" alt="Card image cap">
+      <p>
+        <a href="https://github.com/salkynsu">Я на Гитхабе</a>
+      </p>
+    </article>
+  </div> 
+</div>
+{% endblock %}
