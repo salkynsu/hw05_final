@@ -123,7 +123,10 @@ class PostURLTest(TestCase):
         """
         author = PostURLTest.user
         response = self.authorized_client.get(
-            reverse('posts:profile_follow', kwargs={'username': author.username}),
+            reverse(
+                'posts:profile_follow',
+                kwargs={'username': author.username}
+            ),
             follow=True
         )
         self.assertRedirects(
@@ -137,7 +140,10 @@ class PostURLTest(TestCase):
         """
         author = PostURLTest.user
         response = self.authorized_client.get(
-            reverse('posts:profile_unfollow', kwargs={'username': author.username}),
+            reverse(
+                'posts:profile_unfollow',
+                kwargs={'username': author.username}
+            ),
             follow=True
         )
         self.assertRedirects(

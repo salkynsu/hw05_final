@@ -25,13 +25,13 @@ class PostViewsTest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        some_gif = (            
-             b'\x47\x49\x46\x38\x39\x61\x02\x00'
-             b'\x01\x00\x80\x00\x00\x00\x00\x00'
-             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-             b'\x0A\x00\x3B'
+        some_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
         )
         cls.uploaded = SimpleUploadedFile(
             name='some.gif',
@@ -53,8 +53,7 @@ class PostViewsTest(TestCase):
         cls.post = Post.objects.create(
             author=cls.user,
             text='Текст',
-            group=cls.group,
-            #image=cls.uploaded
+            group=cls.group
         )
         cls.another_post = Post.objects.create(
             author=cls.another_user,
@@ -62,13 +61,14 @@ class PostViewsTest(TestCase):
             group=cls.another_group,
             image=cls.uploaded
         )
-    
+
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
-        # Модуль shutil - библиотека Python с удобными инструментами 
-        # для управления файлами и директориями: 
-        # создание, удаление, копирование, перемещение, изменение папок и файлов
+        # Модуль shutil - библиотека Python с удобными инструментами
+        # для управления файлами и директориями:
+        # создание, удаление, копирование, перемещение,
+        # изменение папок и файлов
         # Метод shutil.rmtree удаляет директорию и всё её содержимое
         shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
 
@@ -214,12 +214,11 @@ class PostViewsTest(TestCase):
         )
         self.assertNotIn(post, response.context.get('page_obj'))
 
-
     def test_authorized_user_can_follow(self):
         """Авторизованный пользователь может подписаться на автора."""
         author = PostViewsTest.user
         user = self.user
-        response = self.authorized_client.get(
+        self.authorized_client.get(
             reverse(
                 'posts:profile_follow',
                 kwargs={'username': author.username}
@@ -228,12 +227,12 @@ class PostViewsTest(TestCase):
         self.assertTrue(
             Follow.objects.filter(author=author, user=user).exists()
         )
-    
+
     def test_authorized_user_can_unfollow(self):
         """Авторизованный пользователь может отписаться от автора."""
         author = PostViewsTest.user
         user = self.user
-        response = self.authorized_client.get(
+        self.authorized_client.get(
             reverse(
                 'posts:profile_unfollow',
                 kwargs={'username': author.username}

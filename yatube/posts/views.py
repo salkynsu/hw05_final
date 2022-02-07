@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post, Group, Comment, User, Follow
+from .models import Post, Group, User, Follow
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
@@ -47,10 +47,10 @@ def profile(request, username):
     template_name = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
     if (
-        request.user.is_authenticated and
-        author!=request.user and
-        Follow.objects.filter(author=author, user=request.user).exists()
-        ):
+        request.user.is_authenticated
+        and author != request.user
+        and Follow.objects.filter(author=author, user=request.user).exists()
+    ):
         following = True
     else:
         following = False
@@ -148,9 +148,9 @@ def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
     user = request.user
     if (
-        author!=user and not
-        Follow.objects.filter(author=author, user=user).exists()
-        ):
+        author != user
+        and not Follow.objects.filter(author=author, user=user).exists()
+    ):
         Follow.objects.create(author=author, user=user)
     return redirect('posts:profile', username)
 
@@ -161,9 +161,9 @@ def profile_unfollow(request, username):
     author = get_object_or_404(User, username=username)
     user = request.user
     if (
-        author!=user and
-        Follow.objects.filter(author=author, user=user).exists()
-        ):
+        author != user
+        and Follow.objects.filter(author=author, user=user).exists()
+    ):
         follow = Follow.objects.get(author=author, user=user)
         follow.delete()
     return redirect('posts:profile', username)
