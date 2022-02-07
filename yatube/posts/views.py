@@ -14,6 +14,7 @@ TIMEOUT: int = 20
 
 @cache_page(TIMEOUT)
 def index(request):
+    """Показывает главную страницу со всеми постами всех авторов."""
     template_name = 'posts/index.html'
     post_list = Post.objects.select_related('author', 'group').all()
     paginator = Paginator(post_list, POSTS_QUANTITY)
@@ -27,6 +28,7 @@ def index(request):
 
 
 def gpoup_list(request, slug):
+    """Показывает посты выбранной группы."""
     template_name = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
     description = group.description
@@ -44,6 +46,7 @@ def gpoup_list(request, slug):
 
 
 def profile(request, username):
+    """Показывает посты выбранного автора."""
     template_name = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
     if (
@@ -69,6 +72,7 @@ def profile(request, username):
 
 
 def post_detail(request, post_id):
+    """Показывает страницу с детальной информацией о посте."""
     template_name = 'posts/post_detail.html'
     post = get_object_or_404(Post, id=post_id)
     post_list = Post.objects.filter(author_id=post.author).all()
@@ -86,6 +90,7 @@ def post_detail(request, post_id):
 
 @login_required
 def post_create(request):
+    """Создать новый пост."""
     template_name = 'posts/create_post.html'
     form = PostForm(request.POST or None, files=request.FILES or None)
     if form.is_valid():
@@ -98,6 +103,7 @@ def post_create(request):
 
 
 def post_edit(request, post_id):
+    """Редактировать уже существующий пост."""
     template_name = 'posts/create_post.html'
     post = get_object_or_404(Post, id=post_id)
     form = PostForm(
@@ -115,6 +121,7 @@ def post_edit(request, post_id):
 
 @login_required
 def add_comment(request, post_id):
+    """Добавить комментарий к посту."""
     post = get_object_or_404(Post, id=post_id)
     form = CommentForm(request.POST or None)
     if form.is_valid():
@@ -127,6 +134,7 @@ def add_comment(request, post_id):
 
 @login_required
 def follow_index(request):
+    """Показывает посты авторов, на которых подписан пользователь."""
     # информация о текущем пользователе доступна в переменной request.user
     template_name = 'posts/follow.html'
     authors = Follow.objects.filter(user=request.user).values('author')
@@ -144,7 +152,7 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    # Подписаться на автора
+    """Подписаться на выбранного автора."""
     author = get_object_or_404(User, username=username)
     user = request.user
     if (
@@ -157,7 +165,7 @@ def profile_follow(request, username):
 
 @login_required
 def profile_unfollow(request, username):
-    # Дизлайк, отписка
+    """Отписаться от выбранного автора."""
     author = get_object_or_404(User, username=username)
     user = request.user
     if (

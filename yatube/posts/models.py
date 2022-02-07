@@ -48,7 +48,6 @@ class Post(CreatedModel):
         ordering = ['-created']
 
     def __str__(self) -> str:
-        # выводим текст поста
         return self.text[:CHAR_Q]
 
 
