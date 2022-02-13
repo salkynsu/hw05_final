@@ -32,7 +32,7 @@ def gpoup_list(request, slug):
     template_name = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
     description = group.description
-    post_list = group.posts.all()
+    post_list = group.posts.select_related("author")
     paginator = Paginator(post_list, POSTS_QUANTITY)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -49,17 +49,18 @@ def profile(request, username):
     """Показывает посты выбранного автора."""
     template_name = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
+    user=request.user
     if (
-        request.user.is_authenticated
-        and author != request.user
-        and Follow.objects.filter(author=author, user=request.user).exists()
+        user.is_authenticated
+        and author != user
+        and Follow.objects.filter(user=user, author=author).exists()
     ):
         following = True
     else:
         following = False
-    post_list = author.posts.all()
-    count = post_list.count()
+    post_list = author.posts.select_related('group')
     paginator = Paginator(post_list, POSTS_QUANTITY)
+    count = paginator.count
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
