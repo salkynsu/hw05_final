@@ -7,7 +7,7 @@
       </li>
       <li>
         <a href="{% url 'posts:profile' post.author.username %}">
-          все посты пользователя
+          Все посты пользователя
         </a>
       </li>
       <li>
@@ -19,13 +19,16 @@
     {% endthumbnail %}
     <p>{{ post.text }}</p>
     <a href="{% url 'posts:post_detail' post.id %}">
-      подробная информация
+      Подробная информация
     </a>
-  </div>
-  <div class="container pb-3">
+    <br>
+    <a href="{% url 'posts:post_detail' post.id %}">
+      Комментарии: {{post.comments.count}} 
+    </a>
+    <br>
     {% if post.group.id != None %} 
     <a href="{% url 'posts:group_list' post.group.slug %}">
-      все записи группы
+      Все записи группы
     </a>
     {% endif %}
     {% if not forloop.last %}<hr>{% endif %}

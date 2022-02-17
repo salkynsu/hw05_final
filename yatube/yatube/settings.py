@@ -23,13 +23,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'fuot&^j_v37@gc_9@hdq%k!()jf&xg)h-%_8bw8awb0s-2y=oq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '[::1]',
     'testserver',
+    'www.likarpenkova.pythonanywhere.com',
+    'likarpenkova.pythonanywhere.com',
 ]
 
 CSRF_COOKIE_SECURE = True
