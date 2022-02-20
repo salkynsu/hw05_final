@@ -158,6 +158,10 @@ def profile_follow(request, username):
     user = request.user
     if (
         author != user
+        # Проверка существования подписки оставлена, несмотря на прописанный
+        # в модели Follow constraint, т.к. тесты Яндекса не были рассчитаны 
+        # на constraint и падают.
+        # Функциональной нагрузки не несёт.
         and not Follow.objects.filter(author=author, user=user).exists()
     ):
         Follow.objects.create(author=author, user=user)

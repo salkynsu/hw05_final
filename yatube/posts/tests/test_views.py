@@ -38,8 +38,9 @@ class PostViewsTest(TestCase):
             content=some_gif,
             content_type='image/gif'
         )
-        cls.user = User.objects.create_user(username='testAuthor')
-        cls.another_user = User.objects.create_user(username='anotherAuthor')
+        cls.author = User.objects.create_user(username='testAuthor')
+        cls.another_author = User.objects.create_user(username='anotherAuthor')
+        cls.user = User.objects.create_user(username='nonAuthor')
         cls.group = Group.objects.create(
             title='Тестовая группа',
             slug='test-slug',
@@ -51,15 +52,19 @@ class PostViewsTest(TestCase):
             description='Тестовое описание ещё одной группы',
         )
         cls.post = Post.objects.create(
-            author=cls.user,
+            author=cls.author,
             text='Текст',
             group=cls.group
         )
         cls.another_post = Post.objects.create(
-            author=cls.another_user,
+            author=cls.another_author,
             text='Текст другого поста',
             group=cls.another_group,
             image=cls.uploaded
+        )
+        cls.follow = Follow.objects.create(
+            user=PostViewsTest.user,
+            author=PostViewsTest.author
         )
 
 
@@ -77,16 +82,13 @@ class PostViewsTest(TestCase):
         # Создаем неавторизованный клиент
         self.guest_client = Client()
         # Создаем авторизованный клиент
-        self.user = User.objects.create_user(username='nonAuthor')
+        #self.user = User.objects.create_user(username='nonAuthor')
         self.authorized_client = Client()
-        self.authorized_client.force_login(self.user)
+        self.authorized_client.force_login(PostViewsTest.user)
         # Создаем авторизованый клиент, который также автор поста
         self.author_client = Client()
-        self.author_client.force_login(PostViewsTest.another_user)
-        self.follow = Follow.objects.create(
-            user=self.user,
-            author=PostViewsTest.user
-        )
+        self.author_client.force_login(PostViewsTest.another_author)
+        
         cache.clear()
 
     def test_pages_use_correct_template(self):
@@ -218,8 +220,8 @@ class PostViewsTest(TestCase):
 
     def test_authorized_user_can_follow(self):
         """Авторизованный пользователь может подписаться на автора."""
-        author = PostViewsTest.user
-        user = self.user
+        author = PostViewsTest.another_author
+        user = PostViewsTest.user
         self.authorized_client.get(
             reverse(
                 'posts:profile_follow',
@@ -232,8 +234,8 @@ class PostViewsTest(TestCase):
 
     def test_authorized_user_can_unfollow(self):
         """Авторизованный пользователь может отписаться от автора."""
-        author = PostViewsTest.user
-        user = self.user
+        author = PostViewsTest.author
+        user = PostViewsTest.user
         self.authorized_client.get(
             reverse(
                 'posts:profile_unfollow',

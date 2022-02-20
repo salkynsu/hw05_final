@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Custom 403{% endblock %}
 {% block content %}
-  <h1>Ошибка 403. Доступ запрещен</h1>
+<div class="container py-5">
+  <h1>Ошибка 403. Доступ запрещён</h1>
   <p>У вас нет разрешения для доступа к странице.</p>
   <p>Может быть, вы забыли <a href="{% url 'users:login' %}">авторизоваться</a>?</p>
+</div>
 {% endblock %}
